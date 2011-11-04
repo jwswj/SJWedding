@@ -10,7 +10,7 @@ var port = process.env.NODE_ENV === 'production' ? 80 : 8080;
 var host = process.env.NODE_ENV === 'production' ? config.host : 'localhost';
 
 // Connect to Mongoose using our database config.
-mongoose.connect('mongodb://localhost:27017/SJWedding', function(err) {
+mongoose.connect('mongodb://jason:smale@staff.mongohq.com:10049/WeddingPics', function(err) {
 	logger.error(err);
 	if (!err) {
 		logger.info('Mongoose connected');
@@ -31,7 +31,6 @@ app.configure(function(){
 
 // Initialise our Picture model.
 var Event = require('./models/event');
-var Picture = require('./models/picture');
 
 app.all('/', function(req, res){
 
