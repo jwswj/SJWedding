@@ -1,0 +1,15 @@
+{
+	"author": "Jason Smale",
+	"name": "SJWedding",
+	"description": "Application for Sian and Jason's Wedding",
+	"version": "0.1.0",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/jwswj/SJWedding.git"
+	},
+	"engines": {
+		"node": "0.4.11"
+	},
+	"dependencies": {
+	}
+}
