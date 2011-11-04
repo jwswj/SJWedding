@@ -19,6 +19,8 @@ mongoose.connect('mongodb://localhost:27017/SJWedding', function(err) {
 
 app.configure(function(){
 
+	app.use(express.bodyParser());
+
 	app.use(app.router);
 	app.use(express.static(__dirname + '/public'));
 	
@@ -28,6 +30,7 @@ app.configure(function(){
 });
 
 // Initialise our Picture model.
+var Event = require('./models/event');
 var Picture = require('./models/picture');
 
 app.all('/', function(req, res){
@@ -36,11 +39,52 @@ app.all('/', function(req, res){
 
 });
 
-app.post('/newpic/:id', function(req, res){
+// Add a new event
+app.all('/event/add', function(req, res){
+	
+	var message;
 
-	logger.trace(req.params.id);
-	logger.debug(req.body);
-		
+	if(req.body){
+		//This is a post request, so try and save a new event with the data.
+
+		var event = new Event();
+
+		event.name = req.body.name;
+		event.created = new Date();
+
+		event.save(function(err){
+		    if(err){
+		        throw err;
+		        logger.trace(err);
+		        message = 'There was an error adding your event';
+		    }else{
+		        logger.trace('New event saved');
+		        message = 'Your event was added';
+		        res.render('event/add', {'message': message});
+		    }
+		});
+
+	}else{
+		message = 'Please enter an event name';
+		res.render('event/add', {'message': message});
+	}
+
+});
+
+// Show all events which are currently in the DB
+app.all('/event', function(req, res){
+	Event.find({}, function (err, docs) {
+  		logger.debug(docs);
+	});
+
+	res.render('message', {'message':'rendered'});
+});
+
+// Add a picture to an event
+app.all('/picture/add/:eventName', function(req, res){
+
+	//logger.debug(req.body);
+	
 	var picture = new Picture();
 
 	picture.image.full = 'http://image.com/full';
@@ -51,16 +95,21 @@ app.post('/newpic/:id', function(req, res){
 
 	logger.debug(picture);
 
-	picture.save(function(err){
-	    if(err){
-	        throw err;
-	        logger.trace(err);
-	    }else{
-	        logger.trace('saved!');
-	    }
-	});
+	// Find the correct event and add the picture
+	Event.findOne({ name:req.params.eventName }, function (err, event){
+		if (!err) {
+			event.pictures.push(picture);
+			logger.debug(event);
 
-	res.json({'success':true});
+		    //event.pictures.push(picture);
+		    //event.save(function (err) {
+		      // do something
+		    //});
+		    res.json({'success':true});
+	  	}else{
+	  		res.json({'success':false});
+	  	}
+	});
 
 });
 
