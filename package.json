@@ -1,5 +1,6 @@
 {
   "name": "WeddingPics",
+  "version": "0.0.1",
   "description": "An app which allows people at weddings to take pictures",
   "author": "Jason Smale <jason.smale@gmail.com>",
   "dependencies": {
