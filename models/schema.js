@@ -13,7 +13,7 @@ var mongoose = require('mongoose')
 
 var schema = new Schema({
     _id       : ObjectId,
-    image     : { 
+    image     : {
         full: String,
         thumb: String,
     }
