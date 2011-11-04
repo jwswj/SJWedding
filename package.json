@@ -1,0 +1,13 @@
+{
+  "name": "WeddingPics",
+  "description": "An app which allows people at weddings to take pictures",
+  "author": "Jason Smale <jason.smale@gmail.com>",
+  "dependencies": {
+    "express": "2.5.x",
+    "mongoose": "2.3.x",
+    "ejs": "0.4.x",
+    "socket.io":"0.8.x",
+    "stylus":"0.19.x"
+  },
+  "engine": "node >= 0.4.1"
+}
