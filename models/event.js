@@ -11,16 +11,14 @@ var mongoose = require('mongoose')
 
 // recursive embedded-document schema
 var schema = new Schema({
-    name     	: String
+    name     	: {type: String, index: true, unique: true}
   , pictures	: [
   					new Schema({
-					    image     : { 
-					        full: String,
-					        thumb: String,
-					    }
-					  , caption   : String
-					  , uuid      : String
-					  , created   : Date
+					    full    : String
+					  , thumb	: String
+					  , caption : String
+					  , uuid    : String
+					  , created : Date
 					})
 				  ]
   , created   	: Date

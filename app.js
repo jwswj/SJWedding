@@ -38,8 +38,16 @@ app.all('/', function(req, res){
 
 });
 
+// Show all events which are currently in the DB
+app.all('/events/all', function(req, res){
+	Event.find({}, ['name'], function (err, events) {
+  		logger.debug(events);
+  		res.json(events);
+	});
+});
+
 // Add a new event
-app.all('/event/add', function(req, res){
+app.all('/events/add', function(req, res){
 	
 	var message;
 
@@ -59,38 +67,51 @@ app.all('/event/add', function(req, res){
 		    }else{
 		        logger.trace('New event saved');
 		        message = 'Your event was added';
-		        res.render('event/add', {'message': message});
+		        res.render('events/add', {'message': message});
 		    }
 		});
 
 	}else{
 		message = 'Please enter an event name';
-		res.render('event/add', {'message': message});
+		res.render('events/add', {'message': message});
 	}
 
 });
 
-// Show all events which are currently in the DB
-app.all('/event', function(req, res){
-	Event.find({}, function (err, docs) {
-  		logger.debug(docs);
+// Get all pictures associated to an event
+app.all('/pictures/all/:eventName', function(req, res){
+	// Find the correct event and add the picture
+	Event.findOne({ name:req.params.eventName }, function (err, event){
+		if (!err) {
+		    res.json(event.pictures);
+	  	}else{
+	  		res.json({'success':false});
+	  	}
 	});
+});
 
-	res.render('message', {'message':'rendered'});
+app.all('/fake', function(req, res){
+
+	if(req.body){
+		res.render('fake', {});
+	}else{
+		res.render('fake', {});
+	}
+
 });
 
 // Add a picture to an event
-app.all('/picture/add/:eventName', function(req, res){
+app.post('/pictures/add/:eventName', function(req, res){
 
 	//logger.debug(req.body);
 	
-	var picture = new Picture();
+	var picture = new Array();
 
-	picture.image.full = 'http://image.com/full';
-	picture.image.thumb = 'http://image.com/thumb';
+	picture.full = 'http://image.com/full';
+	picture.thumb = 'http://image.com/thumb';
 	picture.caption = 'Hot stuff';
 	picture.uuid = 'asdfghjkl1234567890';
-	picture.date = new Date();
+	picture.created = new Date();
 
 	// Find the correct event and add the picture
 	Event.findOne({ name:req.params.eventName }, function (err, event){
