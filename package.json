@@ -10,5 +10,5 @@
     "socket.io":"0.8.x",
     "stylus":"0.19.x"
   },
-  "engine": "node >= 0.4.1"
+  "engine": "node >= 0.4.11"
 }
