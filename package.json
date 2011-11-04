@@ -9,7 +9,9 @@
     "mongoose": "2.3.x",
     "ejs": "0.4.x",
     "socket.io":"0.8.x",
-    "stylus":"0.19.x"
+    "stylus":"0.19.x",
+    "hooks":"0.1.9",
+    "mkdirp":"0.0.7"
   },
   "engine": "node >= 0.4.11"
 }
