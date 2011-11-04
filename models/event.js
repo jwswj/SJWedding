@@ -3,8 +3,7 @@
  */
 
 var mongoose = require('mongoose')
-  , Schema = mongoose.Schema
-  , Picture = require('./picture');
+  , Schema = mongoose.Schema;
 
 /**
  * Schema definition
@@ -13,7 +12,17 @@ var mongoose = require('mongoose')
 // recursive embedded-document schema
 var schema = new Schema({
     name     	: String
-  , pictures	: [Picture]
+  , pictures	: [
+  					new Schema({
+					    image     : { 
+					        full: String,
+					        thumb: String,
+					    }
+					  , caption   : String
+					  , uuid      : String
+					  , created   : Date
+					})
+				  ]
   , created   	: Date
 });
 

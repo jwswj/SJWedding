@@ -93,30 +93,27 @@ app.all('/picture/add/:eventName', function(req, res){
 	picture.uuid = 'asdfghjkl1234567890';
 	picture.date = new Date();
 
-	logger.debug(picture);
-
 	// Find the correct event and add the picture
 	Event.findOne({ name:req.params.eventName }, function (err, event){
 		if (!err) {
-			event.pictures.push(picture);
-			logger.debug(event);
-
-		    //event.pictures.push(picture);
-		    //event.save(function (err) {
+		    event.pictures.push(picture);
+		    event.save(function (err) {
 		      // do something
-		    //});
-		    res.json({'success':true});
+		      res.json({'success':true});
+		      logger.debug(event);
+		    });
 	  	}else{
 	  		res.json({'success':false});
 	  	}
 	});
-
 });
 
+// Start the server
 app.listen(port, function(){
 	logger.trace('App is listening on ', port);
 });
 
+// Catch any unhandled errors
 process.on('uncaughtException', function (err) {
 	logger.uncaught(err.stack);
 });
