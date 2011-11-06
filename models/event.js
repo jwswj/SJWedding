@@ -14,8 +14,7 @@ var schema = new Schema({
     name     	: {type: String, index: true, unique: true}
   , pictures	: [
   					new Schema({
-					    full    : String
-					  , thumb	: String
+					    image    : String
 					  , caption : String
 					  , uuid    : String
 					  , created : Date

@@ -33,9 +33,11 @@ app.configure(function(){
 var Event = require('./models/event');
 
 app.all('/', function(req, res){
-
 	res.render('splash');
+});
 
+app.all('/contact', function(req, res){
+	res.render('contact');
 });
 
 // Show all events which are currently in the DB
