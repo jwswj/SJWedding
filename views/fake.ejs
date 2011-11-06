@@ -1,7 +1,45 @@
 <h1>Pretend to post a photo</h1>
 
-<form id="photo" name="photo" method="post" action="/fake">
+<script type="text/javascript" src="//assets.transloadit.com/js/jquery.transloadit2.js"></script>
+<script type="text/javascript">
+   	// We call .transloadit() after the DOM is initialized:
+   	$(document).ready(function() {
+    	// Don't forget this goes inside your document.ready
+		$('#newpicture').transloadit({
+		  modal: false,
+		  autoSubmit: false,
+		  wait: true,
+		  onProgress: function(bytesReceived, bytesExpected) {
+		    // render your own progress bar!
+		    $('#progress')
+		      .text((bytesReceived / bytesExpected * 100).toFixed(2)+'%');
+		  },
+		  onError: function(assembly) {
+		    alert(assembly.error+': '+assembly.message);
+		  },
+		  onSuccess: function(assembly) {
+		  	console.log(assembly);
+		  }
+		});
+
+		// Event handler to submit form
+		$('#button').click(function(){
+			$('#newpicture').submit();
+			return false;
+		});
+   });
+</script>
+
+<div id="progress"></div>
+
+<form id="newpicture" name="newpicture" method="POST" action="http://api2.transloadit.com/assemblies" enctype="multipart/form-data">
+	<input type="hidden" name="params" value="{&quot;auth&quot;:{&quot;key&quot;:&quot;121f5af949ab45b6a29924e5aa4e9520&quot;},&quot;template_id&quot;:&quot;0a31cdf7aa7b4acfa1508da329d0075d&quot;,&quot;redirect_url&quot;:&quot;/fake&quot;}" />
 	<label for="name">Name</label>
-	<input id="name" name="name" type="text">
+	<input id="name" name="name" type="text" value="SianJason">
+	<label for="photo">Photo</label>
+	<input id="photo" type="file" name="photo">
+	<label for="caption">Caption</label>
+	<input id="caption" name="caption" type="text">
 	<button type="submit">Add</button>
 </form>
+<a id="button" href="">Submit form</a>
