@@ -3,7 +3,70 @@
 <script type="text/javascript" src="/js/jquery.transloadit2.js"></script>
 <script type="text/javascript">
    	// We call .transloadit() after the DOM is initialized:
+   	function loadCurrentPhotos(){
+		$.ajax({
+			  url: "http://localhost:8080/pictures/all/SianJason",
+			  success: function(res){
+			  	var currentPhotos = $('#photoWrapper .scroller img');
+			  	var photos = '';
+			  	var exists = false;
+			  	var photosToAdd = false;
+			  	var test = '';
+			  	for(var i=0, len=res.length; i<len; i++){
+			  		exists = false;
+			  		if(res[i].image.thumb){
+			  			test = res[i].image.thumb[0];
+			  		}
+			  		for(var j=0, k=currentPhotos.length; j<k; j++){
+			  			if(test === $(currentPhotos[j]).attr('data-thumb')){
+			  				exists = true;
+			  			}
+			  		}
+			  		if(exists===false){
+			  			photos += '<img src="' + res[i].image.thumb + '" width="100" height="100" data-current="thumb" data-thumb="' + res[i].image.thumb + '"  data-small="' + res[i].image.small + '" data-original="' + res[i].image.original + '">';
+			  			photosToAdd = true;
+			  		}
+			  	}
+			  	if(photosToAdd){
+			  		$('#photoWrapper .scroller').prepend(photos);
+			  		setTimeout(function () {
+						myScroll.refresh();
+					}, 0);	
+			  	}
+			  }
+			});
+	}
+
+	function startPolling(){
+		var t = setInterval(function(){
+			loadCurrentPhotos();
+		}, 10000);
+	}
+
    	$(document).ready(function() {
+   		loadCurrentPhotos();
+   		startPolling();
+
+		$('#photoWrapper .scroller img').live('click', function(){
+
+			var $this = $(this);
+
+			console.log($this.clientWidth);
+
+			if($this.data('current') === 'thumb'){
+				$this.attr('src',$this.data('small'));
+				$this.attr('height','');
+				$this.attr('width','300');
+				$this.data('current','small');
+			}else{
+				$this.attr('src',$this.data('thumb'));
+				$this.attr('height','100');
+				$this.attr('width','100');
+				$this.data('current','thumb');
+			}
+
+		});
+
     	// Don't forget this goes inside your document.ready
 		$('#newpicture').transloadit({
 		  modal: false,
@@ -74,3 +137,7 @@
 	<button type="submit">Add</button>
 </form>
 <a id="button" href="">Submit form</a>
+
+<div id="photoWrapper">
+	<div class="scroller"></div>
+</div>
