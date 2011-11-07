@@ -24,8 +24,30 @@
 		  onSuccess: function(assembly) {
 		  	// Do an AJAX post with the result to /pictures/add
 		  	// Submit the {results} into a new picture object
-		  	console.log(assembly);
+
+		  	var picture = {
+		  		image: {
+		  			meta:  assembly.results[':original'][0]['meta'],
+		  			original: assembly.results[':original'][0]['url'],
+			  		small:  assembly.results['small'][0]['url'],
+			  		thumb:  assembly.results['thumb'][0]['url'], 
+			  	},
+		  		caption: $('#newpicture #caption').val(),
+		  		uuid: '123456789',
+		  		created: new Date()
+		  	};
+
 		  	$('#progress').hide();
+
+		  	$.ajax({
+			  url: "/pictures/add/SianJason",
+			  data: picture,
+			  type: "POST",
+			  success: function(res){
+			  	console.log(res);
+			  }
+			});
+		  	
 		  }
 		});
 
@@ -37,7 +59,7 @@
    });
 </script>
 
-<div id="progress" style="width: 200px; padding: 2px; background: blue; height: 10px; border-radius: 10px;">
+<div id="progress" style="width: 200px; padding: 2px; background: blue; height: 10px; border-radius: 10px; display: none;">
 	<div class="bar" style="-webkit-transition: all 1s ease-in-out; transition: all 1s ease-in-out; width: 100%; background: red; height: 10px; border-radius:10px;"></div>
 </div>
 

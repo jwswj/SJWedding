@@ -14,13 +14,18 @@ var schema = new Schema({
     name     	: {type: String, index: true, unique: true}
   , pictures	: [
   					new Schema({
-					    image    : String
-					  , caption : String
-					  , uuid    : String
-					  , created : Date
+					    image    : {
+				    		meta: [],
+				    		original: [String],
+				    		small: [String],
+				    		thumb: [String]
+					    }
+					  , caption : [String]
+					  , uuid    : [String]
+					  , created : { type: Date, default: Date.now }
 					})
 				  ]
-  , created   	: Date
+  , created   	: [Date]
 });
 
 /*

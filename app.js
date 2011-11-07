@@ -17,6 +17,7 @@ mongoose.connect('mongodb://jason:smale@staff.mongohq.com:10049/WeddingPics', fu
 	}
 });
 
+// Configuration settings
 app.configure(function(){
 
 	app.use(express.bodyParser());
@@ -32,10 +33,12 @@ app.configure(function(){
 // Initialise our Picture model.
 var Event = require('./models/event');
 
+// Main splash page
 app.all('/', function(req, res){
 	res.render('splash');
 });
 
+// Basic contact page
 app.all('/contact', function(req, res){
 	res.render('contact');
 });
@@ -92,33 +95,15 @@ app.all('/pictures/all/:eventName', function(req, res){
 	});
 });
 
-app.all('/fake', function(req, res){
-
-	if(req.body){
-		res.render('fake', {});
-	}else{
-		res.render('fake', {});
-	}
-
-});
-
 // Add a picture to an event
 app.post('/pictures/add/:eventName', function(req, res){
 
-	//logger.debug(req.body);
-	
-	var picture = new Array();
-
-	picture.full = 'http://image.com/full';
-	picture.thumb = 'http://image.com/thumb';
-	picture.caption = 'Hot stuff';
-	picture.uuid = 'asdfghjkl1234567890';
-	picture.created = new Date();
+	logger.debug(req.body);
 
 	// Find the correct event and add the picture
 	Event.findOne({ name:req.params.eventName }, function (err, event){
 		if (!err) {
-		    event.pictures.push(picture);
+		    event.pictures.push(req.body);
 		    event.save(function (err) {
 		      // do something
 		      res.json({'success':true});
@@ -128,6 +113,29 @@ app.post('/pictures/add/:eventName', function(req, res){
 	  		res.json({'success':false});
 	  	}
 	});
+});
+
+// Add a picture to an event
+app.all('/pictures/view/:eventName', function(req, res){
+
+	// Find the correct event and add the picture
+	Event.findOne({ name:req.params.eventName }, function (err, event){
+		if (!err) {
+		      res.render('pictures/view', {'pictures':event.pictures});
+		      //logger.debug(event);
+	  	}
+	});
+});
+
+// Debug page
+app.all('/fake', function(req, res){
+
+	if(req.body){
+		res.render('fake', {});
+	}else{
+		res.render('fake', {});
+	}
+
 });
 
 // Start the server
